@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +11,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Auth::routes(['register' => false, 'verify' => false]);
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+// Маршруты, доступные авторизованным пользователям
+Route::middleware(['auth'])->group(function () {
+    // Выход из приложения
+    Route::get('/logout', 'Auth\LoginController@logout')->name('logout-get');
 });
