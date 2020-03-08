@@ -8,10 +8,18 @@
     <title>@yield('title') - {{ config('app.name', 'Laravel') }}</title>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon-32x32.png') }}" type="image/png">
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ asset('safari-pinned-tab.svg') }}" color="#2c3e50">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#2c3e50">
     <meta property="og:title" content="@yield('title') - {{ config('app.name', 'Laravel') }}">
     <meta property="og:type" content="website">
-    <!-- TODO: Раскомментировать когда будут добавлены иконки приложения -->
-    <!--<meta property="og:image" content="{{ asset('img/logo/logo-bordered-md.png') }}">-->
+    <meta property="og:image" content="{{ asset('img/logo/logo-bordered-md.png') }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:description" content="Сборник статей">
     <meta property="og:locale" content="{{ app()->getLocale() }}">
