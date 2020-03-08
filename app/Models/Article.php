@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -18,6 +19,8 @@ use Illuminate\Support\Str;
  * @property bool $published Статус публикации.
  * @property Carbon $created_at Дата создания.
  * @property Carbon $updated_at Дата обновления.
+ *
+ * @property Collection $comments Связная модель списка комментариев к статье.
  *
  * @method static Builder published() Показывает только опубликованные статьи.
  */
@@ -43,5 +46,10 @@ class Article extends Model
     public function scopePublished($query)
     {
         return $query->where('published', true);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comment');
     }
 }

@@ -26,8 +26,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/articles/{id?}/edit', 'ArticlesController@edit')->name('edit-article');
     Route::post('/admin/articles/{id?}/edit', 'ArticlesController@update');
     Route::post('/admin/articles/{id?}/delete', 'ArticlesController@destroy')->name('delete-article');
+
+    Route::post('/admin/comments/{id}/delete', 'ArticlesController@deleteComment')->name('delete-comment');
 });
 
 Route::get('/articles/{id?}', 'MainController@showArticle')->name('show-article');
+Route::post('/comments/create', 'MainController@addComment')->name('create-comment');
 
 Route::get('/', 'MainController@index')->name('home');

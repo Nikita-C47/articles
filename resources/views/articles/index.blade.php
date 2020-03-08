@@ -15,6 +15,7 @@
                     <th>#</th>
                     <th>Заголовок</th>
                     <th>Опубликовано</th>
+                    <th>Комментариев</th>
                     <th>Изменено</th>
                     <th>Действия</th>
                 </tr>
@@ -37,6 +38,7 @@
                                 <i class="fas fa-times text-danger"></i>
                             @endif
                         </td>
+                        <td>{{ $article->comments_count }}</td>
                         <td>{{ $article->updated_at->format('d.m.Y H:i:s') }}</td>
                         <td>
                             <div class="row">

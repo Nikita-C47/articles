@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ArticleFormRequest;
 use App\Models\Article;
-use Illuminate\Http\Request;
+use App\Models\Comment;
 
 /**
  * Класс, представляющий контроллер для работы со статьями.
@@ -20,7 +20,7 @@ class ArticlesController extends Controller
     public function index()
     {
         // Получаем разбитый по страницам список
-        $articles = Article::orderBy('id', 'desc')->paginate(10);
+        $articles = Article::withCount('comments')->orderBy('id', 'desc')->paginate(10);
         // Возвращаем представление
         return view('articles.index', [
             'articles' => $articles
@@ -62,13 +62,18 @@ class ArticlesController extends Controller
     /**
      * Отображает детальную страницу статьи.
      *
-     * @param  int  $id
+     * @param int $id ID записи в БД.
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $article = Article::findOrFail($id);
-        return view('articles.view', ['article' => $article]);
+        /** @var Article $article */
+        $article = Article::withCount('comments')->findOrFail($id);
+        $comments = $article->comments()->orderBy('id', 'desc')->paginate(10);
+        return view('articles.view', [
+            'article' => $article,
+            'comments' => $comments
+        ]);
     }
 
     /**
@@ -126,6 +131,19 @@ class ArticlesController extends Controller
         return redirect()->route('articles')->with('alert', [
             'type' => 'success',
             'text' => 'Статья #'.$article->id.' успешно удалена'
+        ]);
+    }
+
+    public function deleteComment($id)
+    {
+        // Получаем комментарий
+        /** @var Comment $comment */
+        $comment = Comment::findOrFail($id);
+        $comment->delete();
+        // Перенаправляем на список статей с уведомлением
+        return redirect()->route('view-article', ['id' => $comment->article_id])->with('alert', [
+            'type' => 'success',
+            'text' => 'Комментарий #'.$comment->id.' успешно удален'
         ]);
     }
 }

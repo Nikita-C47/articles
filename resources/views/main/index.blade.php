@@ -15,7 +15,12 @@
                     </p>
                 </div>
                 <div class="card-footer text-muted">
-                    {{ $article->created_at->diffForHumans() }}
+                    <div class="float-left">
+                        {{ $article->created_at->diffForHumans() }}
+                    </div>
+                    <div class="float-right text-info">
+                        Комментариев: {{ $article->comments_count }}
+                    </div>
                 </div>
             </div>
         @endforeach

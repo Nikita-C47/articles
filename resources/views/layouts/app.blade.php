@@ -80,6 +80,11 @@
         </nav>
         <main class="mt-2">
             <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <h3>@yield('title')</h3>
+                    </div>
+                </div>
                 @if(session('alert'))
                     <div class="row">
                         <div class="col">
@@ -87,16 +92,12 @@
                         </div>
                     </div>
                 @endif
-                <div class="row">
-                    <div class="col">
-                        <h3>@yield('title')</h3>
-                    </div>
-                </div>
                 @yield('content')
             </div>
         </main>
     </div>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    @stack('scripts')
 </body>
 </html>

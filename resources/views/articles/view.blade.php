@@ -3,7 +3,7 @@
 @section('title', $article->title)
 
 @section('content')
-    <div class="card">
+    <div class="card border-primary">
         <div class="card-body">
             {{ $article->content }}
         </div>
@@ -50,4 +50,40 @@
             </div>
         </div>
     </div>
+    @if(count($comments) > 0)
+        <div class="mt-3">
+            <h4>Комментарии ({{ $article->comments_count }}):</h4>
+            <div class="table-responsive-sm">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Автор</th>
+                        <th>Текст</th>
+                        <th>Добавлен</th>
+                        <th>Действия</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($comments as $comment)
+                        <tr>
+                            <td>{{ $comment->id }}</td>
+                            <td>{{ $comment->author }}</td>
+                            <td>{{ $comment->content }}</td>
+                            <td>{{ $comment->created_at->format('d.m.Y H:i:s') }}</td>
+                            <td>
+                                <confirmation-modal v-bind:id="{{ $comment->id }}"
+                                                    v-bind:entity_name="'{{ $comment->id }}'"
+                                                    v-bind:action="'{{ route('delete-comment', ['id' => $comment->id]) }}'"></confirmation-modal>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                {{ $comments->links() }}
+            </div>
+        </div>
+    @endif
 @endsection
