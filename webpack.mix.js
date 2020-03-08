@@ -13,5 +13,11 @@ const mix = require('laravel-mix');
 
 mix.js('resources/js/app.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css')
+    .styles([
+        'public/css/app.css',
+        'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
+    ], 'public/css/app.css')
     .copyDirectory('resources/img', 'public/img')
-    .copyDirectory('resources/webicons', 'public');
+    .copyDirectory('resources/webicons', 'public')
+    // Копируем папку шрифтов FA
+    .copyDirectory('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts');

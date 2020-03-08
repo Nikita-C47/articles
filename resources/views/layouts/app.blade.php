@@ -28,7 +28,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand" href="{{ route('home') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -58,6 +58,11 @@
                                 </li>
                             @endif
                         @else
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('articles') }}">
+                                    Статьи
+                                </a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -75,9 +80,16 @@
         </nav>
         <main class="mt-2">
             <div class="container">
+                @if(session('alert'))
+                    <div class="row">
+                        <div class="col">
+                            @include('widgets.alert', ['alert' => session('alert')])
+                        </div>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col">
-                        <h1>@yield('title')</h1>
+                        <h3>@yield('title')</h3>
                     </div>
                 </div>
                 @yield('content')
