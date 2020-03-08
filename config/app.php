@@ -232,5 +232,6 @@ return [
     'google_recaptcha' => [
         'key' => env('GOOGLE_RECAPTCHA_KEY'),
         'secret' => env('GOOGLE_RECAPTCHA_SECRET')
-    ]
+    ],
+    'enable_notifications' => env('ENABLE_NOTIFICATIONS', false)
 ];
