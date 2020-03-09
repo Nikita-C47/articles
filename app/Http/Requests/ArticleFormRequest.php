@@ -5,27 +5,34 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Класс, представляющий запрос на добавление/обновление статьи.
+ * @package App\Http\Requests Запросы приложения.
+ */
 class ArticleFormRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Определяет, может ли пользователь выполнять этот запрос.
      *
      * @return bool
      */
     public function authorize()
     {
+        // Выполнять запрос может только авторизованный пользователь
         return Auth::check();
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Возвращает правила валидации.
      *
-     * @return array
+     * @return array массив с правилами валидации.
      */
     public function rules()
     {
         return [
+            // Заголовок статьи
             'title' => 'required',
+            // Текст статьи
             'content' => 'required'
         ];
     }

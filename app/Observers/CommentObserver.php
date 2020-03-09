@@ -8,19 +8,27 @@ use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 
+/**
+ * Класс, представляющий наблюдатель для модели комментария.
+ * @package App\Observers Наблюдатели приложения.
+ */
 class CommentObserver
 {
     /**
-     * Handle the comment "created" event.
+     * Обрабатывает событие создания комментария.
      *
-     * @param  \App\Models\Comment  $comment
+     * @param \App\Models\Comment $comment объект добавленного комментария.
      * @return void
      */
     public function created(Comment $comment)
     {
+        // Если в конфигурации указана отправка уведомлений и пользователь, добавивший комментарий, не авторизован
         if(config('app.enable_notifications') && !Auth::check()) {
+            // Получаем список пользователей приложения
             $users = User::all();
+            // Загружаем в комментарий данные о статье
             $comment->load('article');
+            // Отправляем уведомления
             Notification::send($users, new CommentAddedNotification($comment->toArray()));
         }
     }

@@ -48,16 +48,10 @@
             calculateId: function() {
                 return "deleteConfirmationId"+this.id;
             },
+            // Селектор для модального окна
             selector: function () {
                 return "#"+this.calculateId;
             }
-            /*
-            // Показывает модальное окно
-            showModal: function () {
-                $("#"+this.calculateId(id)).modal('show');
-            }
-
-             */
         }
     }
 </script>

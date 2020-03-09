@@ -4,15 +4,19 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Класс, представляющий миграцию создания таблицы комментариев.
+ */
 class CreateCommentsTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Запускает миграцию.
      *
      * @return void
      */
     public function up()
     {
+        // Комментарии
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('article_id');
@@ -25,7 +29,7 @@ class CreateCommentsTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Откатывает миграцию.
      *
      * @return void
      */

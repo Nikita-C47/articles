@@ -1,78 +1,105 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# Сборник статей
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+Простой сборник статей на Laravel Framework. Поддерживает добавление статей и комментариев к ним. 
+Основные возможности:
+* **Добавление статей.** Добавлять статьи может только авторизованный пользователь. У статьи можно 
+выставить статус публикации (в публичной части будут отображаться только опубликованные статьи);
+* **Просмотр статей в публичной части.** В публичной части отображается список опубликованных статей. 
+Любой, кто зашел на сайт может посмотреть его и прочитать каждую из статей;
+* **Комментирование статей.** Любой посетитель сайта может оставить комментарий к статье. Если 
+он не авторизован, добавляется [Google Recaptcha](https://www.google.com/recaptcha/intro/v3.html) 
+для того, чтобы удостовериться что он не робот;
+* **Удаление комментариев.** В административной части можно удалять комментарии, которые не удовлетворяют 
+политике сайта в отношении общения пользователей;
+* **Уведомление о новых комментариях.** При наличии сервера электронной почты, можно настроить отправку 
+уведомлений о новых комментариях.
 
-## About Laravel
+## Развертывание приложения
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Так как приложение написано на [Laravel Framework](https://laravel.com/), нужно выполнить ряд требований 
+для подготовки среды, в которой оно будет выполняться. Подробнее о требованиях к серверу можно прочитать 
+[тут](https://laravel.com/docs/7.x#server-requirements). Там же описаны настройки веб-сервера для 
+отображения "красивых" URL.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Далее нужно установить СУБД, так как в ней приложение хранит свои данные. Список поддерживаемых СУБД 
+можно найти [тут](https://laravel.com/docs/7.x/database#introduction).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Для получения проекта из системы контроля версий и установки зависимостей, нужно чтобы на сервере были 
+установлены [Git](https://git-scm.com/) и [Composer](https://getcomposer.org/doc/00-intro.md#system-requirements).
 
-## Learning Laravel
+После этого можно приступить к развертыванию приложения. Оно включает следующие шаги:
+* Клонировать проект из git-репозитория (либо загрузить его) - 
+`git clone https://github.com/Nikita-C47/articles.git`;
+* Перейти в корневую директорию проекта;
+* Установить зависимости (фреймворк и вспомогательные библиотеки) с помощью Composer - 
+`composer install`.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+После того как исходный код приложения развернут, нужно заняться его конфигурацией. В проекте присутствует 
+файл .env.example, на основе которого можно заполнить конфигурацию приложения. Сохраните его под названием 
+.env и заполните в файле .env следующие параметры (подробнее о заполнении файлов такого типа написано 
+[здесь](https://github.com/vlucas/phpdotenv)):
+* `APP_NAME` - название приложения. Отображается, например, на верхней навигационной панели. Вы можете 
+задать свое, если Вас не устраивает стандартное;
+* `APP_ENV` - окружение приложения. При развертывание на рабочем сервере, нужно указать 
+`production`;
+* `APP_DEBUG` - включение или отключение отладки. При включенной отладке все ошибки отображаются в 
+браузере. На рабочем сервере должна быть отключена;
+* `APP_URL` - хост, на котором разворачивается приложение (используется, например, при генерации 
+ссылок, так что важный параметр);
+* `DB_CONNECTION` - используемое подключение к СУБД (список поддерживаемых СУБД можно найти выше), 
+там же описано как заполнять данный параметр и все параметры, связанные с БД;
+* `DB_HOST` - хост СУБД;
+* `DB_PORT` - порт СУБД;
+* `DB_DATABASE` - база данных приложения;
+* `DB_USERNAME` - имя пользователя для подключения к СУБД (пользователь должен иметь полные права на 
+базу данных);
+* `DB_PASSWORD` - пароль пользователя для подключения к СУБД.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+После установки этих параметров, нужно заполнить базу данных приложения. Проект не подразумевает большое 
+количество пользователей, поэтому тут нет полноценного функционала для их создания. Однако в проекте 
+присутствует класс *database/seeds/UsersSeeder*. В нем есть массив `$users`, в котором можно указать список 
+пользователей, которых нужно добавить в приложение. Там можно прописать отображаемое имя, email и пароль. 
+После того, как этот массив будет заполнен реальными данными, нужно выполнить команду `php artisan db:seed` 
+и пользователи будут загружены в приложение. Если вдруг нужно добавить еще пользователей, нужно просто 
+добавить их в массив `$users` и выполнить команду снова. Существующие пользователи будут не тронуты, а 
+новые - добавлены.
 
-## Laravel Sponsors
+Заключительный этап - настройка Google Recaptcha. Для ее использования, необходимо 
+[получить ключ и секрет](http://www.google.com/recaptcha/admin) для вашего ресурса. В проекте 
+используется Recaptcha v.2 типа чекбокс. После получения этих данных, нужно указать их в переменных 
+`GOOGLE_RECAPTCHA_KEY` и `GOOGLE_RECAPTCHA_SECRET` (ключ и секрет, соответственно) файла .env.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Настройка уведомлений
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
+Дополнительный этап - настройка уведомлений в приложении. По-умолчанию уведомления о новых комментариях к 
+статьям отключены. Если Вы хотите их включить, нужно выполнить ряд шагов. Первое (и самое очевидное) - 
+настроить отправку электронной почты с сервера. Второе - установить движок очередей, так как уведомления 
+отправляются отложенно. Список поддерживаемых движков можно найти [тут](https://laravel.com/docs/7.x/queues).  
+Соответственно для того, чтобы задания в очереди обрабатывались, нужно запустить воркер. О том как это 
+сделать читайте [здесь](https://laravel.com/docs/7.x/queues#running-the-queue-worker) (там же присутствует 
+конфигурация для Supervisor, к примеру).
 
-## Contributing
+После того, как необходимое ПО установлено и настроено, нужно внести изменения в файл конфигурации .env, в 
+котором необходимо указать следующие параметры:
+* `QUEUE_CONNECTION` - используемый движок очередей. О поддерживаемых движках и заполнении этого 
+параметра упоминалось выше. При использовании Redis, нужно будет заполнить секцию с его настройками. В 
+частности переменные `REDIS_HOST`, `REDIS_PASSWORD` и `REDIS_PORT`;
+* `MAIL_DRIVER` - используемый драйвер для почты. Поддерживается как обычный SMTP, так и 
+[сторонние сервисы](https://laravel.com/docs/7.x/mail#configuration);
+* `MAIL_HOST` - хост сервера отправки электронной почты;
+* `MAIL_PORT` - порт сервера отправки электронной почты;
+* `MAIL_USERNAME` - имя пользователя для сервера отправки электронной почты;
+* `MAIL_PASSWORD` - пароль пользователя для сервера отправки электронной почты;
+* `MAIL_ENCRYPTION` - используемое шифрование электронной почты;
+* `MAIL_FROM_ADDRESS` - адрес, от которого ведется отправка сообщений;
+* `MAIL_FROM_NAME` - имя, от которого ведется отправка (по-умолчанию - название приложения);
+* `ENABLE_NOTIFICATIONS` - настройка, отвечающая за включение отправки уведомлений. Для включения нужно 
+указать `true`, для отключения - `false`.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Лицензии
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Сам Laravel распространяется по лицензии [MIT](https://opensource.org/licenses/MIT), как и многие 
+компоненты, входящие в этот проект (например [Vue.js](https://vuejs.org/)). На использование проекта не 
+налагается никаких ограничений, Вы можете модифицировать и изменять его по своему усмотрению. Моей 
+целью в нем было только саморазвитие и еще один проект в портфолио. По всем вопросам, связанным с 
+проектом, обращайтесь на мой контактный email - nikita_c47@outlook.com.

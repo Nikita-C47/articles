@@ -20,8 +20,14 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Comment extends Model
 {
+    /** @var array $fillable заполняемые поля. */
     protected $fillable = ['article_id', 'author', 'content'];
 
+    /**
+     * Связь с моделью статьи.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function article()
     {
         return $this->belongsTo('App\Models\Article');

@@ -67,8 +67,10 @@ class ArticlesController extends Controller
      */
     public function show($id)
     {
+        // Ищем статью со счетчиком комментариев
         /** @var Article $article */
         $article = Article::withCount('comments')->findOrFail($id);
+        // Получаем комментарии в отдельный объект
         $comments = $article->comments()->orderBy('id', 'desc')->paginate(10);
         return view('articles.view', [
             'article' => $article,
@@ -84,7 +86,9 @@ class ArticlesController extends Controller
      */
     public function edit($id)
     {
+        // Ищем статью
         $article = Article::findOrFail($id);
+        // Возвращаем представление
         return view('articles.edit', ['article' => $article]);
     }
 
@@ -100,12 +104,12 @@ class ArticlesController extends Controller
         // Получаем статью
         /** @var Article $article */
         $article = Article::findOrFail($id);
+        // Сохраняем ее
         $article->fill([
             'title' => $request->get('title'),
             'content' => $request->get('content'),
             'published' => $request->has('published')
         ]);
-        // Сохраняем ее
         $article->save();
         // Перенаправляем на список статей с уведомлением
         return redirect()->route('articles')->with('alert', [
@@ -134,11 +138,19 @@ class ArticlesController extends Controller
         ]);
     }
 
+    /**
+     * Удаляет комментарий из БД.
+     *
+     * @param int $id ID записи в БД.
+     * @return \Illuminate\Http\Response
+     * @throws \Exception исключение при неудачном удалении.
+     */
     public function deleteComment($id)
     {
         // Получаем комментарий
         /** @var Comment $comment */
         $comment = Comment::findOrFail($id);
+        // Удаляем его
         $comment->delete();
         // Перенаправляем на список статей с уведомлением
         return redirect()->route('view-article', ['id' => $comment->article_id])->with('alert', [

@@ -7,26 +7,31 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
+/**
+ * Класс, представляющий уведомление о добавлении нового комментарий к статье.
+ * @package App\Notifications Уведомления приложения.
+ */
 class CommentAddedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    /** @var array $comment массив с данными о комментарии. */
     private $comment;
 
     /**
-     * Create a new notification instance.
+     * Создает новый экземпляр класса.
      *
-     * @param array $comment
+     * @param array $comment комментарий.
      */
     public function __construct(array $comment)
     {
+        // Инициализируем поле
         $this->comment = $comment;
     }
 
     /**
-     * Get the notification's delivery channels.
+     * Получает каналы доставки уведомления.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable уведомляемый объект.
      * @return array
      */
     public function via($notifiable)
@@ -35,14 +40,14 @@ class CommentAddedNotification extends Notification implements ShouldQueue
     }
 
     /**
-     * Get the mail representation of the notification.
+     * Получает представление уведомления в виде письма.
      *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @param mixed $notifiable уведомляемый объект.
+     * @return \Illuminate\Notifications\Messages\MailMessage объект сообщения для отправки.
      */
     public function toMail($notifiable)
     {
-        // TODO: Русификация сообщений валидации
+        // Собираем сообщение
         return (new MailMessage)
                     ->subject('Новый комментарий к статье')
                     ->greeting('Здравствуйте! В сборнике статей появился новый комментарий.')
@@ -55,10 +60,10 @@ class CommentAddedNotification extends Notification implements ShouldQueue
     }
 
     /**
-     * Get the array representation of the notification.
+     * Получает представление уведомления в виде массива.
      *
-     * @param  mixed  $notifiable
-     * @return array
+     * @param mixed $notifiable уведомляемый объект.
+     * @return array массив.
      */
     public function toArray($notifiable)
     {

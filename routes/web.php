@@ -11,6 +11,7 @@
 |
 */
 
+// Маршруты авторизации
 Auth::routes(['register' => false, 'verify' => false]);
 
 // Маршруты, доступные авторизованным пользователям
@@ -26,11 +27,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/articles/{id?}/edit', 'ArticlesController@edit')->name('edit-article');
     Route::post('/admin/articles/{id?}/edit', 'ArticlesController@update');
     Route::post('/admin/articles/{id?}/delete', 'ArticlesController@destroy')->name('delete-article');
-
+    // Удаление комментария
     Route::post('/admin/comments/{id}/delete', 'ArticlesController@deleteComment')->name('delete-comment');
 });
 
+// Просмотр статьи в пубдичной части
 Route::get('/articles/{id?}', 'MainController@showArticle')->name('show-article');
+// Добавление комментария
 Route::post('/comments/create', 'MainController@addComment')->name('create-comment');
-
+// Главная
 Route::get('/', 'MainController@index')->name('home');

@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CommentRequest;
+use App\Http\Requests\CommentFormRequest;
 use App\Models\Article;
 use App\Models\Comment;
-use App\User;
 use GuzzleHttp\Client;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -42,9 +40,12 @@ class MainController extends Controller
      */
     public function showArticle($id)
     {
+        // Получаем статью со счетчиком комментариев
         /** @var Article $article */
         $article = Article::published()->withCount('comments')->findOrFail($id);
+        // Получаем отдельно комментарии
         $comments = $article->comments()->orderBy('created_at', 'desc')->paginate(10);
+        // Возвращаем представление
         return view('main.show-article', [
             'article' => $article,
             'comments' => $comments
@@ -54,14 +55,13 @@ class MainController extends Controller
     /**
      * Добавляет комментарий к статье.
      *
-     * @param CommentRequest $request запрос на добавление комментария.
+     * @param CommentFormRequest $request запрос на добавление комментария.
      * @return \Illuminate\Http\Response
      */
-    public function addComment(CommentRequest $request)
+    public function addComment(CommentFormRequest $request)
     {
         // Получаем ID статьи
         $articleId = $request->get('article_id');
-
         // Если пользователь авторизован - просто сохраняем статью
         if(Auth::check()) {
             /** @var \App\User $user */
@@ -81,7 +81,7 @@ class MainController extends Controller
         } else {
             // Если пользователь не авторизован - нужно проверить капчу
             if($this->verifyCaptcha($request->get('g-recaptcha-response'))) {
-                // Добавляем новый комментарий
+                // Если капча пройдена - добавляем новый комментарий
                 $comment = new Comment([
                     'article_id' => $articleId,
                     'author' => $request->get('author'),
