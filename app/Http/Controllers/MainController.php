@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CommentFormRequest;
+use App\Jobs\CheckCaptcha;
 use App\Models\Article;
 use App\Models\Comment;
 use GuzzleHttp\Client;
@@ -80,55 +81,16 @@ class MainController extends Controller
             ];
         } else {
             // Если пользователь не авторизован - нужно проверить капчу
-            if($this->verifyCaptcha($request->get('g-recaptcha-response'))) {
-                // Если капча пройдена - добавляем новый комментарий
-                $comment = new Comment([
-                    'article_id' => $articleId,
-                    'author' => $request->get('author'),
-                    'content' => $request->get('content')
-                ]);
-                $comment->save();
-                // Генерируем алерт
-                $alert = [
-                    'type' => 'success',
-                    'text' => 'Ваш комментарий успешно добавлен'
-                ];
-            } else {
-                // Иначе указываем что есть проблемы
-                $alert = [
-                    'type' => 'danger',
-                    'text' => 'Подтвердите, что вы не робот!'
-                ];
-            }
+            CheckCaptcha::dispatch(
+                $request->except('g-recaptcha-response'), $request->get('g-recaptcha-response')
+            );
+            // Формируем уведомление
+            $alert = [
+                'type' => 'success',
+                'text' => 'Ваш комментарий будет добавлен после проверки'
+            ];
         }
         // Возвращаем редирект на указанную статью с уведомлением
         return redirect()->route('show-article', ['id' => $articleId])->with('alert', $alert);
-    }
-
-    /**
-     * Проверяет ответ Google captcha.
-     *
-     * @param string $response ответ google captcha.
-     * @return bool флаг успешности проверки.
-     */
-    private function verifyCaptcha(string $response)
-    {
-        // Заводим клиент Guzzle
-        $client = new Client();
-        // Делаем запрос
-        $result = $client->post('https://www.google.com/recaptcha/api/siteverify', [
-            'form_params' => [
-                'secret' => config('app.google_recaptcha.secret'),
-                'response' => $response
-            ]
-        ]);
-        // Если ответ не успешен, возвращаем ложь
-        if($result->getStatusCode() !== 200) {
-            return false;
-        }
-        // Получаем контент ответа и декодируем его из JSON
-        $content = json_decode($result->getBody()->getContents());
-        // Возвращаем статус проверки
-        return $content->success;
     }
 }
